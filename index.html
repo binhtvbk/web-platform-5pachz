@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sample API get all combo & type</title>
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div class="jumbotron form-group">
+      <h6 class="text-primary form-control">API mẫu</h6>
+      <button class="btn btn-info form-control" onClick="getAllCombos()">
+        Get all Combo / Lấy danh sách combo Pizza
+      </button>
+      <button class="btn btn-success form-control" onclick="getAllTypes()">
+        get all Type / lấy danh sách type Pizza
+      </button>
+    </div>
+    <div id="content" class="container jumbotron">
+      <div class="row"></div>
+    </div>
+  </body>
+  <script>
+    const gREQUEST_STATUS_OK = 200;
+    const gREQUEST_READY_STATUS_FINISH_AND_OK = 4;
+
+    // Mẫu gọi API lấy danh sách Combo Pizza
+    function getAllCombos() {
+      //base url
+      const vBASE_URL = 'https://647406377de100807b1a4df4.mockapi.io/combos';
+      // create a request
+      // var vXmlHttObj = new XMLHttpRequest();
+      // vXmlHttObj.open('GET', vBASE_URL, true);
+      // vXmlHttObj.send();
+      // vXmlHttObj.onreadystatechange = function () {
+      //   if (
+      //     this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK &&
+      //     this.status == gREQUEST_STATUS_OK
+      //   ) {
+      //     console.log(vXmlHttObj.responseText);
+      //   }
+      // };
+
+      // Dùng jQuery
+      $.ajax(vBASE_URL, {
+        dataType: 'json', // type of response data
+        success: function (data, status, xhr) {
+          const allContent = data.map((el) => {
+            const htmlTemplate = `
+              <div class="card col-sm-6">
+                <div class="card-body">
+                  <h5 class="card-title">${el['kichCo']}</h5>
+                  <p>${el['duongKinh']}</p>
+                  <p>${el['salad']}</p>
+                  <p>${el['nuocNgot']}</p>
+                  <p>${el['suongNuong']}</p>
+                  <p>${el['thanhTien']}</p>
+                </div>
+              </div>
+            `;
+            return htmlTemplate;
+          });
+          $('#content .row').append(allContent);
+        },
+        error: function (jqXhr, textStatus, errorMessage) {
+          $('#content .row').append('Error: ' + errorMessage);
+        },
+      });
+    }
+
+    // Mẫu gọi API lấy danh sách Type Pizza
+    function getAllTypes() {
+      //base url
+      const vBASE_URL = 'https://647406377de100807b1a4df4.mockapi.io/types';
+
+      var vXmlHttpObj = new XMLHttpRequest();
+      vXmlHttpObj.open('GET', vBASE_URL, true);
+      vXmlHttpObj.send();
+      vXmlHttpObj.onreadystatechange = function () {
+        if (
+          this.readyState == gREQUEST_READY_STATUS_FINISH_AND_OK &&
+          this.status == gREQUEST_STATUS_OK
+        ) {
+          console.log(vXmlHttpObj.responseText);
+        }
+      };
+    }
+  </script>
+</html>
